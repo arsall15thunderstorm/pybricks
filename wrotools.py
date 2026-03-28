@@ -251,7 +251,15 @@ def gyroTurn(target_angle: int, turn_speed: int, clockwise: bool) -> None:
     right_motor.hold()
 
 
-for i in range(4):
+# TESTING GYRO FUNCTIONS AGAINST BUILT IN FUNCTIONS
 
+for i in range(4):
     gyroStraight(10, 200, False)
     gyroTurn(90, 20, True)
+
+for i in range(4):
+    db.straight(200)
+    db.turn(90)
+
+
+
