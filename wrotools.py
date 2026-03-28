@@ -212,5 +212,46 @@ def gyroStraight(min_speed: float, target_distance: int, backwards: bool) -> Non
     left_motor.hold()
     right_motor.hold()
 
-gyroStraight(10, 200, True)
-gyroStraight(10, 200, False)
+def turnGyro(target_angle: int, turn_speed: int, clockwise: bool) -> None:
+
+    """
+    Turns the robot to a target angle using the gyro sensor
+    
+    :param target_angle: The angle the robot will turn to
+    :type target_angle: int
+    :param turn_speed: The speed the robot will turn at
+    :type turn_speed: int
+    :param clockwise: Whether the robot will turn clockwise or counterclockwise
+    :type clockwise: bool
+    """
+
+    resetDB()
+
+    while True:
+        current_angle = hub.imu.heading()
+        error = (target_angle - current_angle + 180) % 360 - 180
+
+        if abs(error) <= 2:
+            break
+
+        speed = convert_speed(turn_speed, True)
+
+        if error > 0:
+            left_motor.run(speed if clockwise else -speed)
+            right_motor.run(-speed if clockwise else speed)
+        else:
+            left_motor.run(-speed if clockwise else speed)
+            right_motor.run(speed if clockwise else -speed)
+
+        wait(10)
+
+        print(f'Current Angle: {current_angle}, Error: {error}')
+
+    left_motor.hold()
+    right_motor.hold()
+
+
+for i in range(4):
+    
+    gyroStraight(10, 200, False)
+    turnGyro(90, 20, True)
