@@ -72,6 +72,12 @@ part3: float = 0.2 * target_distance
 
 # HELPER FUNCTIONS
 
+def setCoordinates(x: float, y: float) -> None:
+    global coordinates
+
+    coordinates[0] = x
+    coordinates[1] = y
+
 def updateCoordinates(distance_mm: float) -> None:
     angle_rad = umath.radians(hub.imu.heading())
 
@@ -145,7 +151,7 @@ def convertSpeed(speed: int, isLargeMotor: bool) -> float:
     else:
         return (speed/100) * 1110
 
-def gyroStraight(min_speed: float, target_distance: int, backwards: bool) -> None:
+def gyroStraight(min_speed: float, target_distance: float, backwards: bool) -> None:
 
     """
     Makes the robot move straight while utilizing a PID control system to remain at a yaw angle of 0
@@ -160,7 +166,7 @@ def gyroStraight(min_speed: float, target_distance: int, backwards: bool) -> Non
 
     resetDB()
 
-    def kpControl(base_speed: float, target_distance: int) -> tuple[float, float, float]:
+    def kpControl(base_speed: float, target_distance: float) -> tuple[float, float, float]:
 
         """
         Controls and calculates the PID based motor speeds and correction
@@ -234,7 +240,7 @@ def gyroStraight(min_speed: float, target_distance: int, backwards: bool) -> Non
     dist_moved = -target_distance if backwards else target_distance
     updateCoordinates(dist_moved)
 
-def gyroTurn(target_angle: int, turn_speed: int, clockwise: bool) -> None:
+def gyroTurn(target_angle: float, turn_speed: int, clockwise: bool) -> None:
 
     """
     Turns the robot to a target angle using the gyro sensor
@@ -271,6 +277,35 @@ def gyroTurn(target_angle: int, turn_speed: int, clockwise: bool) -> None:
 
     left_motor.hold()
     right_motor.hold()
+
+
+def moveToCoordinates(target_x: float, target_y: float, move_speed: int) -> None:
+    
+    """
+    Moves the robot to a target coordinate using the gyro sensor and odometry
+    
+    :param target_x: The x coordinate the robot will move to
+    :type target_x: float
+    :param target_y: The y coordinate the robot will move to
+    :type target_y: float
+    :param move_speed: The speed the robot will move at
+    :type move_speed: int
+    """
+
+    angle = umath.degrees(umath.atan2(target_y - coordinates[1], target_x - coordinates[0]))
+    distance = umath.sqrt((target_x - coordinates[0])**2 + (target_y - coordinates[1])**2)
+
+    gyroTurn(angle, move_speed, True)
+    gyroStraight(move_speed, int(distance), False)
+
+
+
+tasks: list = [
+    [],
+    [],
+    []
+]
+
 
 
 
