@@ -1,7 +1,7 @@
 [project]
 name = "pybricks-wro-26"
-version = "0.1.0"
-description = "Add your description here"
+version = "1.0.2"
+description = "WRO 26 Junior Python code using pybricks for Spike Prime"
 readme = "README.md"
 requires-python = ">=3.12"
 dependencies = [
