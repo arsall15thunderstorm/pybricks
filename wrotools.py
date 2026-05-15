@@ -9,7 +9,7 @@ from pybricks.hubs import PrimeHub
 from pybricks.pupdevices import Motor, ColorSensor, UltrasonicSensor, ForceSensor
 from pybricks.parameters import Button, Color, Direction, Port, Side, Stop
 from pybricks.robotics import DriveBase
-from pybricks.tools import wait, StopWatch
+from pybricks.tools import wait, StopWatch, run_task, multitask
 
 # MATH STUFF
 
@@ -124,6 +124,20 @@ def moveToCoordinates(target_x: float, target_y: float) -> None:
     db.straight(int(distance))
     db.turn(-angle)
 
+
+async def moveAttachmentArms(speed, angle):
+    speed1 = convertSpeed(speed, True)
+    speed2 = convertSpeed(-speed, True)
+    
+
+    async def move_right():
+        await attachment_right.run_angle(speed1, angle)
+        
+    async def move_left():
+        await attachment_left.run_angle(speed2, angle)
+        
+    
+    await multitask(move_right(), move_left())
 
 # not used and will not be used for a while:
 
