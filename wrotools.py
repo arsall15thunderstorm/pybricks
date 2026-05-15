@@ -27,7 +27,6 @@ hub: PrimeHub = PrimeHub()
 left_motor: Motor = Motor(Port.F, Direction.COUNTERCLOCKWISE)
 right_motor: Motor = Motor(Port.B)
 #color_sensor1: ColorSensor = ColorSensor(Port.C)
-# color_sensor2: ColorSensor = ColorSensor(Port.D)
 attachment_left: Motor = Motor(Port.E)
 attachment_right: Motor = Motor(Port.A)
 db: DriveBase = DriveBase(left_motor, right_motor, wheel_diameter, distance_between_wheels)
@@ -36,18 +35,6 @@ watch = StopWatch()
 watch.reset()
 hub.imu.reset_heading(0)
 coordinates: list[float] = [0.0, 0.0]
-
-current_heading_offset = 0.0
-
-
-
-
-# CONSTANTS
-
-# will change these as needed
-
-# PID STATE VARIABLES
-
 
 
 # HELPER FUNCTIONS
@@ -69,43 +56,14 @@ def updateCoordinates(distance_mm: float) -> None:
     coordinates[1] += delta_y
 
 
-
-def startMovingAtSpeeds(speed1: float, speed2: float) -> None:
-    """
-    Starts moving both motors at individually controlled speeds
-    
-    :param speed1: Speed value of the left motor
-    :type speed1: inted)
-        wait(10)
-
-    :param speed2: Speed value of the right motor
-    :type speed2: intfrom wrotools import *
-    """
-
-    left_motor.run(speed1)
-    right_motor.run(speed2)
-
-def startDCAtSpeeds(speed1: float, speed2: float) -> None:
-    """
-    Starts individually moving the motors with motor.dc()
-    
-    :param speed1: Speed value of the left motor
-    :type speed1: float
-    :param speed2: Speed value of the right motor
-    :type speed2: float
-    """
-    left_motor.dc(speed1)
-    right_motor.dc(speed2)
-
-
-
 def resetDB() -> None:
     """
     Resets the driving base
     """
 
-    #db.reset()
-    hub.imu.reset_heading(0)
+    db.reset()
+    left_motor.reset_angle(0)
+    right_motor.reset_angle(0)
     print("reset complete")
     wait(50)
 
@@ -165,6 +123,38 @@ def moveToCoordinates(target_x: float, target_y: float) -> None:
     db.turn(angle)
     db.straight(int(distance))
     db.turn(-angle)
+
+
+# not used and will not be used for a while:
+
+
+def startMovingAtSpeeds(speed1: float, speed2: float) -> None:
+    """
+    Starts moving both motors at individually controlled speeds
+    
+    :param speed1: Speed value of the left motor
+    :type speed1: inted)
+        wait(10)
+
+    :param speed2: Speed value of the right motor
+    :type speed2: intfrom wrotools import *
+    """
+
+    left_motor.run(speed1)
+    right_motor.run(speed2)
+
+
+def startDCAtSpeeds(speed1: float, speed2: float) -> None:
+    """
+    Starts individually moving the motors with motor.dc()
+    
+    :param speed1: Speed value of the left motor
+    :type speed1: float
+    :param speed2: Speed value of the right motor
+    :type speed2: float
+    """
+    left_motor.dc(speed1)
+    right_motor.dc(speed2)
 
 
 
