@@ -126,8 +126,8 @@ def moveToCoordinates(target_x: float, target_y: float) -> None:
 
 
 async def moveAttachmentArms(speed, angle):
-    speed1 = convertSpeed(speed, True)
-    speed2 = convertSpeed(-speed, True)
+    speed1 = convertSpeed(-speed, True)
+    speed2 = convertSpeed(speed, True)
     
 
     async def move_right():
